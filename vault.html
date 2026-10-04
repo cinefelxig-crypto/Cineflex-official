@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#050505">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>The Vault | Cineflex — Premium Short-Form Edits</title>
+    <meta name="description" content="6 years of mastery. A curated collection of premium short-form video edits.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-dim: rgba(212,175,55,0.12);
+            --bg: #050505;
+            --surface: rgba(255,255,255,0.03);
+            --border: rgba(255,255,255,0.08);
+            --text: #f0f0f0;
+            --subtext: #888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 20%, rgba(212,175,55,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(212,175,55,0.03) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAV */
+        .vault-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(5,5,5,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .vault-nav .logo {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--gold);
+            font-size: 1.3rem;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: var(--subtext);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+        /* HERO */
+        .vault-hero {
+            position: relative;
+            z-index: 1;
+            padding: 110px 1.5rem 50px;
+            text-align: center;
+        }
+        .eyebrow {
+            display: inline-block;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            border: 1px solid var(--gold-dim);
+            padding: 0.35rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            background: var(--gold-dim);
+        }
+        .vault-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(2.2rem, 6vw, 4rem);
+            line-height: 1.1;
+            color: var(--text);
+            margin-bottom: 1.2rem;
+            background: linear-gradient(135deg, #fff 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .vault-hero p {
+            font-size: 0.95rem;
+            color: var(--subtext);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* LIST LAYOUT FOR MOBILE */
+        .grid-section {
+            position: relative;
+            z-index: 1;
+            max-width: 800px; /* narrowed for list style */
+            margin: 0 auto;
+            padding: 0 1rem 5rem;
+        }
+        
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-label span {
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--gold-dim), transparent);
+        }
+
+        .clips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* SLEEK LIST ITEM CARD */
+        .list-card {
+            display: flex;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .list-card:hover, .list-card:active {
+            border-color: rgba(212,175,55,0.4);
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .list-num {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--gold-dim);
+            margin-right: 1.2rem;
+            font-family: 'Outfit', sans-serif;
+            min-width: 40px;
+            text-align: right;
+        }
+        
+        .list-content {
+            flex: 1;
+            padding-right: 1rem;
+        }
+        
+        .list-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        
+        .list-line {
+            font-size: 0.75rem;
+            color: var(--subtext);
+            font-style: italic;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .play-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            min-width: 70px;
+        }
+
+        .play-indicator .icon-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(212,175,55,0.1);
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+        }
+
+        .list-card:hover .icon-circle {
+            background: rgba(212,175,55,0.3);
+        }
+
+        .play-indicator span {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* FEATURED CARD */
+        .featured-card {
+            background: linear-gradient(135deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%);
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: transform 0.2s;
+        }
+        .featured-card:hover, .featured-card:active {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212,175,55,0.1);
+        }
+        
+        .feat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .feat-badge {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #000;
+            background: var(--gold);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .feat-title {
+            font-size: 1.4rem;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--text);
+        }
+
+        .feat-desc {
+            font-size: 0.85rem;
+            color: var(--subtext);
+            line-height: 1.5;
+        }
+        
+        .feat-play {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gold);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+
+        .gold-divider {
+            width: 60px; height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 1.5rem auto;
+        }
+
+        .vault-footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--subtext); }
+        .vault-footer a { color: var(--gold); text-decoration: none; }
+
+        @media (max-width: 600px) {
+            .list-card { padding: 0.8rem; }
+            .list-num { font-size: 1rem; margin-right: 0.8rem; min-width: 30px; }
+            .play-indicator { min-width: 50px; }
+            .play-indicator .icon-circle { width: 30px; height: 30px; }
+            .play-indicator span { font-size: 0.45rem; }
+            .feat-title { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="vault-nav">
+        <a href="index.html" class="logo">Cineflex</a>
+        <a href="index.html" class="back-btn">
+            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back
+        </a>
+    </nav>
+
+    <section class="vault-hero">
+        <div class="eyebrow">✦ The Vault — 30 Edits</div>
+        <h1>Pure Impact.</h1>
+        <p>No heavy previews, just raw performance. Tap any edit below to watch it in cinematic fullscreen.</p>
+    </section>
+
+    <section class="grid-section">
+        
+        <div class="section-label"><span>✦ Signature Edit</span></div>
+        
+        <div class="featured-card reveal" onclick="playClip('1GNUrB3U1DujiSk8WXwHxKNLKXLYm1xqy', 'The Edit That Stops the Scroll', '', '#01')">
+            <div class="feat-header">
+                <span class="feat-badge">#01</span>
+                <i data-lucide="film" style="color:var(--gold); width:20px; height:20px;"></i>
+            </div>
+            <div class="feat-title">The Edit That Stops the Scroll</div>
+            <div class="feat-desc">Where the first frame is a declaration. Built not just to be watched — but to be felt.</div>
+            <div class="feat-play"><i data-lucide="play-circle" style="width:16px;height:16px;"></i> Click to View</div>
+        </div>
+
+        <div class="section-label"><span>✦ The Collection</span></div>
+        <div class="clips-list" id="clipsList"></div>
+    </section>
+
+    <footer class="vault-footer">
+        <p>© 2026 Cineflex | <a href="https://instagram.com/Gagan_praj310" target="_blank">@Gagan_praj310</a></p>
+    </footer>
+
+    <script>
+        const clips = [
+            { id: '16Ja34YhQm25QYPCqoznCCd2DLQ692_fh', num: '02', title: 'The Hook Edit', line: '"Color graded to feel. Every cut lands like a heartbeat..."' },
+            { id: '13XhSfdNWuMbf_IMmUbMeAgf8FN8geQOm', num: '03', title: 'Mood Architect', line: '"Not just an edit — a mood. A feeling that lingers."' },
+            { id: '1jZqSWLFEWzFaQ2U1cVNawgGXEJ4ulssA', num: '04', title: 'Blink & You\'ll Miss It', line: '"The hook hit before you blinked. Six years of craft."' },
+            { id: '1-WEpFTWOG8ZCBwq_YI0mK0UaurBCzMUv', num: '05', title: 'Transitions Are Storytelling', line: '"The invisible thread that makes viewers forget they\'re watching."' },
+            { id: '1Z7gfcWvU6i3t0eV2IMK7PgjRWQnxL6Gk', num: '06', title: 'Six Years in Seconds', line: '"Obsession compressed into seconds. Every frame is a decision."' },
+            { id: '1XhGdu-BJn4tzoOASzW3iNNoH0jN9hbS3', num: '07', title: 'Rhythm & Vision', line: '"When rhythm meets vision — the edit breathes and pulses."' },
+            { id: '1wYIHB_lIGXuxXGOKmenFEoqGGnA1rVTg', num: '08', title: 'Made to Rewatch', line: '"Built to be felt. The kind of edit you save without thinking."' },
+            { id: '1HSicCZPG589ybax5HlRiZ0z5VCFh8zzv', num: '09', title: 'The Scroll Stopper', line: '"The scroll stops here. Not by accident — by design."' },
+            { id: '1hCu_sd8RwsQEXhmD716Z4--Whu24U8ZH', num: '10', title: 'Raw Becomes Art', line: '"The transformation happens in the edit — this is the proof."' },
+            { id: '1QJHIzX-hPNXCo_Kb7QPIUjZ6Vq4QKrLO', num: '11', title: 'Sound Meets Soul', line: '"When the music drops and the cut lands — goosebumps."' },
+            { id: '13HFZAGE9lhYiTrLRXiloFdH0hz0JQ0q0', num: '12', title: 'Effortless Pacing', line: '"It took years to make hard look this easy."' },
+            { id: '1W4AkIhmezYIfXgqur52DCteVYQP5hz64', num: '13', title: 'No Filler, Just Fire', line: '"Every frame earns its place. Zero-compromise editing."' },
+            { id: '1ldqs9D9rYx2qAYzT2x-Al0LYxnLaC4Dj', num: '14', title: 'Creator Fuel', line: '"Makes creators say \'I need this for my content.\'"' },
+            { id: '1jNTBVpBo8DKozkYCKm1ce2Gx6iBWAgYB', num: '15', title: 'Speed & Silence', line: '"Contrast is the language of the edit."' },
+            { id: '1-Zhr1HJnOEo9d7xlqaPg4Jdxg2cfZ8S2', num: '16', title: 'Unbroken Vibe', line: '"The energy flows like it was always meant to."' },
+            { id: '1kleSJ1ZIw9EZOG8KC8PmLnP1HqSq9hQu', num: '17', title: 'Engineered, Not Edited', line: '"Every element calculated to create maximum impact."' },
+            { id: '1DsGcOcmBB1I4fxHlReedcUA_fn52SBCB', num: '18', title: 'Cinema Lives Here', line: '"Every detail here is intentional, purposeful, and precise."' },
+            { id: '1Xay03KB5tsSxMmVwirK3NCJnDlLfavkC', num: '19', title: 'The Perfect Short', line: '"Hook. Hold. Hit. The anatomy of a perfect edit."' },
+            { id: '1VAO8EfHgLlITsuig1gKbJ63W7Pf9wtS_', num: '20', title: 'The Seamless Cut', line: '"Mastery — invisible and unforgettable."' },
+            { id: '1oz4GZa0_Whl0TMparr5lnZ9LjjCz4Kdt', num: '21', title: 'Energy in Every Frame', line: '"Silence that speaks louder than anything words could say."' },
+            { id: '1PNeHyoieCI2Ajq-ckTit8E840_RZKNPY', num: '22', title: 'Aesthetic Is the Message', line: '"When it looks this good, you don\'t need to say anything."' },
+            { id: '1sFH5XrtXtk3FsMeRaexcymU7gcrap7Tz', num: '23', title: 'Short Form. Long Impact.', line: '"This is what happens when you refuse to settle."' },
+            { id: '1AjcQRcLhJ4zRCZN39ySBghE3b4y5gZgB', num: '24', title: '3 Seconds to 30', line: '"Crafted for 3 seconds, held for 30."' },
+            { id: '1p3zom_eQhzLXb6Wn1l8dqO9mCNTWKpAw', num: '25', title: 'What 6 Years Looks Like', line: '"Not a portfolio piece — a statement of intent."' },
+            { id: '1J_9_6QGezP8ENZ8xVCRbtvmaIeXLmosv', num: '26', title: 'The Holy Trinity', line: '"Color. Cut. Cadence."' },
+            { id: '1U-CjgRihirifj4DRQVRZEI_wGw3ohl1x', num: '27', title: 'Built for Virality', line: '"Trending today, timeless tomorrow."' },
+            { id: '1tZ0raKa9-ZN18T6RfSw2lj7AHyYFSpT2', num: '28', title: 'You Didn\'t Know You Needed This', line: '"Now you can\'t imagine your feed without it."' },
+            { id: '1STGa0c4w5Ow1gs3LaT2_pileP5g6hkkb', num: '29', title: 'Precision Over Perfection', line: '"Vibe over volume. Intention and soul."' },
+            { id: '1W2XD8HABa1FF2XEgiyUfuNswtwB-AXO_', num: '30', title: 'The Vault Doesn\'t Miss', line: '"Chosen because it doesn\'t miss. Ever."' }
+        ];
+
+        function playClip(id, title, line, num) {
+            const params = new URLSearchParams({ id, title, line, num });
+            window.location.href = `player.html?${params.toString()}`;
+        }
+
+        const list = document.getElementById('clipsList');
+        const fragment = document.createDocumentFragment();
+
+        clips.forEach((clip, i) => {
+            const card = document.createElement('div');
+            card.className = 'list-card reveal';
+            card.innerHTML = `
+                <div class="list-num">${clip.num}</div>
+                <div class="list-content">
+                    <div class="list-title">${clip.title}</div>
+                    <div class="list-line">${clip.line}</div>
+                </div>
+                <div class="play-indicator">
+                    <div class="icon-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px;"><polygon points="5 3 19 12 5 21"></polygon></svg>
+                    </div>
+                    <span>View</span>
+                </div>
+            `;
+            card.addEventListener('click', () => playClip(clip.id, clip.title, clip.line, `#${clip.num}`));
+            fragment.appendChild(card);
+        });
+
+        list.appendChild(fragment);
+
+        lucide.createIcons();
+
+        // Animate elements on scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), (i % 5) * 40);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+        
+        reveals.forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>
